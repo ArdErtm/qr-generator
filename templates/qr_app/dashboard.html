@@ -1,0 +1,167 @@
+{% extends 'base.html' %}
+
+{% block title %}Kontrol Paneli - QR Kod Oluşturucu{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+<style>
+    .card {
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .display-4 {
+        font-size: 2.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">QR Kod Kontrol Paneli</h1>
+
+<!-- QR Kod Analitikleri -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Toplam QR Kodları</h5>
+                <h2 class="display-4">{{ stats.total_qr_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Aktif QR Kodları</h5>
+                <h2 class="display-4">{{ stats.active_qr_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-secondary text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Silinmiş QR Kodları</h5>
+                <h2 class="display-4">{{ stats.deleted_qr_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body text-center">
+                <h5 class="card-title">Bu Haftaki QR Kodları</h5>
+                <h2 class="display-4">{{ stats.weekly_qr_count }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- QR Kod Haftalık Limiti Bilgisi -->
+<div class="limit-info">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Haftalık QR Kod Limiti ({{ start_of_week }} - {{ end_of_week }})</h5>
+        <span class="badge {% if stats.remaining_weekly_limit <= 2 %}bg-danger{% elif stats.remaining_weekly_limit <= 5 %}bg-warning{% else %}bg-success{% endif %}">
+            Kalan: {{ stats.remaining_weekly_limit }}/10
+        </span>
+    </div>
+    <div class="progress mb-2">
+        <div class="progress-bar progress-bar-striped {% if stats.remaining_weekly_limit <= 2 %}bg-danger{% elif stats.remaining_weekly_limit <= 5 %}bg-warning{% else %}bg-success{% endif %}" 
+             role="progressbar" 
+             style="width: {{ stats.weekly_qr_count }}0%" 
+             aria-valuenow="{{ stats.weekly_qr_count }}" 
+             aria-valuemin="0" 
+             aria-valuemax="10">
+            {{ stats.weekly_qr_count }}/10
+        </div>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+        <p class="mb-0"><small class="text-muted">Bir hafta içinde en fazla 10 QR kodu oluşturabilirsiniz.</small></p>
+        <p class="mb-0"><small class="text-muted"><strong>Not:</strong> Silinen QR kodları da haftalık limite dahildir.</small></p>
+    </div>
+</div>
+
+<!-- QR Kod Oluşturma Formu -->
+{% if stats.remaining_weekly_limit > 0 %}
+<div class="form-container">
+    <h3>Yeni QR Kod Oluştur</h3>
+    <form method="post">
+        {% csrf_token %}
+        
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {% for error in form.non_field_errors %}
+                    {{ error }}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.title.id_for_label }}" class="form-label">{{ form.title.label }}</label>
+                {{ form.title.errors }}
+                {{ form.title }}
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="{{ form.redirect_url.id_for_label }}" class="form-label">{{ form.redirect_url.label }}</label>
+                {{ form.redirect_url.errors }}
+                {{ form.redirect_url }}
+            </div>
+        </div>
+        
+        <div class="d-grid">
+            <button type="submit" class="btn btn-primary">QR Kod Oluştur</button>
+        </div>
+    </form>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    <h4 class="alert-heading">Haftalık Limit Doldu!</h4>
+    <p>Bu hafta için QR kod oluşturma limitinize ulaştınız. Yeni bir QR kod oluşturmak için haftanın yenilenmesini beklemeniz gerekmektedir.</p>
+    <hr>
+    <p class="mb-0">Yeni hafta başlangıcı: <strong>{{ end_of_week|date:"l, d F Y" }}</strong> sonrası</p>
+</div>
+{% endif %}
+
+<!-- QR Kod Listesi -->
+<h3 class="mt-5 mb-4">Aktif QR Kodlarım</h3>
+
+{% if qr_codes %}
+    <div class="row">
+        {% for qr in qr_codes %}
+            <div class="col-md-4">
+                <div class="card qr-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">{{ qr.title }}</h5>
+                    </div>
+                    <div class="qr-image">
+                        <img src="{{ qr.qr_code.url }}" alt="{{ qr.title }}" class="img-fluid" style="max-width: 200px;">
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <strong>URL:</strong> <a href="{{ qr.redirect_url }}" target="_blank">{{ qr.redirect_url|truncatechars:30 }}</a>
+                        </p>
+                        <p class="card-text"><small class="text-muted">Oluşturulma: {{ qr.created_at|date:"d.m.Y H:i" }}</small></p>
+                    </div>
+                    <div class="card-footer d-flex justify-content-between">
+                        <a href="{% url 'qr_app:export_qr_pdf' qr.pk %}" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-file-pdf"></i> PDF İndir
+                        </a>
+                        <form method="post" action="{% url 'qr_app:delete_qr' qr.pk %}" onsubmit="return confirm('Bu QR kodu silmek istediğinizden emin misiniz? Not: Silinen QR kodları haftalık limitinizden düşülmeye devam eder.');">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="bi bi-trash"></i> Sil
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        Henüz oluşturulmuş aktif QR kodunuz bulunmamaktadır. Yukarıdaki formu kullanarak ilk QR kodunuzu oluşturabilirsiniz.
+    </div>
+{% endif %}
+{% endblock %} 

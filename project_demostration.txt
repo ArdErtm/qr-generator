@@ -1,0 +1,81 @@
+1. Proje Tanıtımı
+Proje Adı: QR Kod Yönlendirme Sistemi
+Misyon: Kullanıcıların kolayca QR kodları oluşturmasını, yönetmesini ve yönlendirmesini sağlayan güvenilir bir platform sunmak
+Hedef Kitle: Pazarlama profesyonelleri, küçük işletmeler, etkinlik organizatörleri, içerik oluşturucular
+
+2. Teknoloji Altyapısı
+Backend: Django 5.2.1 (Python web framework)
+Frontend:
+HTML, CSS, JavaScript
+Bootstrap 5 (Responsive tasarım)
+Vue.js (Dinamik form işlemleri)
+Veritabanı: SQLite (Geliştirme), PostgreSQL (Canlı ortam)
+Diğer Teknolojiler:
+QRCode (Python kütüphanesi)
+Pillow (Görüntü işleme)
+ReportLab (PDF oluşturma)
+
+3. Ana Özellikler
+Kullanıcı Yönetimi:
+Kayıt, giriş, çıkış işlemleri
+Şifre gösterme/gizleme özelliği
+Doğrulama ve hata mesajları
+QR Kod Yönetimi:
+Hızlı QR kod oluşturma
+Haftalık 10 QR kod oluşturma limiti
+QR kodlarını silme (soft delete)
+PDF olarak dışa aktarma
+Analitik Panel:
+Toplam QR kod istatistikleri
+Aktif/silinmiş QR kod sayıları
+Haftalık kullanım istatistikleri
+Kalan limit göstergesi
+
+4. Sistem Mimarisi
+MVC (Model-View-Controller) Yapısı:
+Model: QRCode, User
+View: Dashboard, Register, Login vb.
+Controller: Form işlemleri, yönlendirmeler
+Klasör Yapısı:
+qr_app/: Ana uygulama dosyaları
+templates/: HTML şablonları
+static/: CSS, JavaScript, resimler
+media/: Kullanıcı yüklenen dosyalar (QR kodlar)
+
+5. Kullanıcı Deneyimi
+Kayıt ve Giriş: Basit ve güvenli kullanıcı doğrulama
+Dashboard: Modern, duyarlı ve bilgilendirici kullanıcı arayüzü
+QR Kod Oluşturma: Kolay ve hızlı süreç
+Görselleştirme: İstatistikler ve limitler için renkli göstergeler
+
+6. Teknik Özellikler
+Doğrudan URL Yönlendirme: QR kodlar tarandığında doğrudan hedef URL'e yönlendirir
+Haftalık Limit Sistemi: Pazartesi'den Pazar'a kadar olan süreçte en fazla 10 QR kod oluşturulabilir
+Soft Delete: Silinen QR kodlar veritabanından tamamen silinmez, "is_deleted" olarak işaretlenir
+Güvenlik Önlemleri: CSRF koruması, şifre hashleme, giriş doğrulama
+
+7. Faydalar ve Kullanım Alanları
+Pazarlama Kampanyaları: Ürün etiketleri, broşürler, reklamlar
+Etkinlik Yönetimi: Biletler, bilgi panoları, yönlendirmeler
+Dijital Menüler: Restoran ve kafeler için temassız menüler
+Eğitim Materyalleri: Sınıf içi kaynaklar, eğitim dokümanları
+
+8. Gelecek Geliştirmeler
+QR Kod Özelleştirme: Renk, logo, şekil değişiklikleri
+Analitik Raporlama: Tarama istatistikleri, coğrafi dağılım
+Çoklu Kullanıcı Rolleri: Admin, editör, standart kullanıcı
+API Entegrasyonu: Üçüncü parti yazılımlarla entegrasyon
+
+9. Demostrasyon
+Canlı uygulama demostrasyon noktaları:
+Kullanıcı kaydı ve girişi
+QR kod oluşturma süreci
+Oluşturulan QR kodları tarama
+Analitik panelin incelenmesi
+PDF çıktısı alma
+Haftalık limitin gösterimi
+
+10. Sonuç
+Projenin özeti
+Teknik başarılar
+Teşekkür ve soru-cevap

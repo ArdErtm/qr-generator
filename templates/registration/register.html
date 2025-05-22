@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block title %}Kayıt Ol - QR Kod Oluşturucu{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Kayıt Ol</h4>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Kullanıcı Adı</label>
+                        {% if form.username.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.username.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <input type="text" name="{{ form.username.name }}" id="{{ form.username.id_for_label }}" class="form-control {% if form.username.errors %}is-invalid{% endif %}" required>
+                        <div class="form-text">150 karakter veya daha az. Harf, rakam ve @/./+/-/_ karakterleri kullanılabilir.</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">E-posta Adresi</label>
+                        {% if form.email.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.email.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <input type="email" name="{{ form.email.name }}" id="{{ form.email.id_for_label }}" class="form-control {% if form.email.errors %}is-invalid{% endif %}" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Şifre</label>
+                        {% if form.password1.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.password1.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="input-group">
+                            <input type="password" name="{{ form.password1.name }}" id="{{ form.password1.id_for_label }}" class="form-control {% if form.password1.errors %}is-invalid{% endif %}" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword1">
+                                <i class="bi bi-eye" id="eye-icon1"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">
+                            <ul>
+                                <li>Şifreniz diğer kişisel bilgilerinizle çok benzer olamaz.</li>
+                                <li>Şifreniz en az 8 karakter içermelidir.</li>
+                                <li>Şifreniz yaygın olarak kullanılan bir şifre olamaz.</li>
+                                <li>Şifreniz tamamen sayısal olamaz.</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Şifre Doğrulama</label>
+                        {% if form.password2.errors %}
+                            <div class="invalid-feedback d-block">
+                                {% for error in form.password2.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="input-group">
+                            <input type="password" name="{{ form.password2.name }}" id="{{ form.password2.id_for_label }}" class="form-control {% if form.password2.errors %}is-invalid{% endif %}" required>
+                            <button class="btn btn-outline-secondary" type="button" id="togglePassword2">
+                                <i class="bi bi-eye" id="eye-icon2"></i>
+                            </button>
+                        </div>
+                        <div class="form-text">Doğrulama için şifrenizi tekrar girin.</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Kayıt Ol</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <p class="mb-0">Zaten bir hesabınız var mı? <a href="{% url 'qr_app:login' %}">Giriş Yap</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Setup toggle for first password field
+        const togglePassword1 = document.getElementById('togglePassword1');
+        const password1 = document.getElementById('{{ form.password1.id_for_label }}');
+        const eyeIcon1 = document.getElementById('eye-icon1');
+        
+        togglePassword1.addEventListener('click', function() {
+            const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
+            password1.setAttribute('type', type);
+            
+            if (type === 'text') {
+                eyeIcon1.classList.remove('bi-eye');
+                eyeIcon1.classList.add('bi-eye-slash');
+            } else {
+                eyeIcon1.classList.remove('bi-eye-slash');
+                eyeIcon1.classList.add('bi-eye');
+            }
+        });
+        
+        // Setup toggle for second password field
+        const togglePassword2 = document.getElementById('togglePassword2');
+        const password2 = document.getElementById('{{ form.password2.id_for_label }}');
+        const eyeIcon2 = document.getElementById('eye-icon2');
+        
+        togglePassword2.addEventListener('click', function() {
+            const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
+            password2.setAttribute('type', type);
+            
+            if (type === 'text') {
+                eyeIcon2.classList.remove('bi-eye');
+                eyeIcon2.classList.add('bi-eye-slash');
+            } else {
+                eyeIcon2.classList.remove('bi-eye-slash');
+                eyeIcon2.classList.add('bi-eye');
+            }
+        });
+    });
+</script>
+{% endblock %} 
