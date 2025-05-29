@@ -11,8 +11,9 @@ class QRCodeAdmin(admin.ModelAdmin):
     list_filter = ('user',)
     
     def qr_preview(self, obj):
-        if obj.qr_code:
-            return mark_safe(f'<img src="{obj.qr_code.url}" width="150" height="150" />')
+        secure_url = obj.get_secure_qr_url()
+        if secure_url:
+            return mark_safe(f'<img src="{secure_url}" width="150" height="150" alt="QR Kod" />')
         return "QR kod henüz oluşturulmadı."
     
     qr_preview.short_description = 'QR Kod Önizleme'

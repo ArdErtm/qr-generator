@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse, HttpResponse, Http404
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.http import require_POST
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse
 import json
 from .models import QRCode
 from .forms import RegisterForm, LoginForm, QRCodeForm
@@ -16,6 +17,8 @@ from PIL import Image
 import os
 from django.utils import timezone
 from datetime import timedelta
+import mimetypes
+from django.conf import settings
 
 def redirect_qr(request, slug):
     """QR kodu tarandığında bu view çalışır ve kullanıcıyı ilgili URL'e yönlendirir"""
@@ -46,7 +49,7 @@ def create_qr_api(request):
             'success': True,
             'id': qr_code.id,
             'slug': qr_code.slug,
-            'qr_code_url': qr_code.qr_code.url
+            'qr_code_url': qr_code.get_secure_qr_url()
         })
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
@@ -165,3 +168,46 @@ def export_qr_pdf(request, pk):
     response['Content-Disposition'] = f'attachment; filename="qr_code_{qr_code.slug}.pdf"'
     
     return response
+
+def secure_media_view(request, file_path):
+    """Media dosyalarını güvenli bir şekilde servis eder"""
+    try:
+        # Güvenlik kontrolleri
+        # Path traversal saldırılarını önle
+        if '..' in file_path or file_path.startswith('/'):
+            raise Http404("Güvenlik hatası: Geçersiz dosya yolu")
+        
+        # Sadece qr_codes klasöründeki dosyalara erişim izni ver
+        if not file_path.startswith('qr_codes/'):
+            raise Http404("Güvenlik hatası: Bu dizine erişim izniniz yok")
+        
+        # Tam dosya yolunu oluştur
+        full_path = os.path.join(settings.MEDIA_ROOT, file_path)
+        
+        # Dosya varlığını kontrol et
+        if not os.path.exists(full_path):
+            raise Http404("Dosya bulunamadı")
+        
+        # Dosya türünü belirle
+        content_type, encoding = mimetypes.guess_type(full_path)
+        if content_type is None:
+            content_type = 'application/octet-stream'
+        
+        # Sadece resim dosyalarına izin ver
+        if not content_type.startswith('image/'):
+            raise Http404("Güvenlik hatası: Sadece resim dosyalarına erişim izni var")
+        
+        # Dosyayı oku ve response oluştur
+        with open(full_path, 'rb') as f:
+            response = HttpResponse(f.read(), content_type=content_type)
+            
+        # Güvenlik header'ları ekle
+        response['Cache-Control'] = 'max-age=3600'  # 1 saat cache
+        response['X-Content-Type-Options'] = 'nosniff'
+        response['X-Frame-Options'] = 'DENY'
+        response['X-XSS-Protection'] = '1; mode=block'
+        
+        return response
+        
+    except Exception as e:
+        raise Http404("Dosya servisi sırasında hata oluştu")

@@ -7,6 +7,7 @@ import os
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
+from django.urls import reverse
 
 class QRCode(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='qr_codes', verbose_name="Kullanıcı", null=True, blank=True)
@@ -58,6 +59,12 @@ class QRCode(models.Model):
         self.is_deleted = True
         self.deleted_at = timezone.now()
         self.save()
+    
+    def get_secure_qr_url(self):
+        """QR kod dosyası için güvenli URL döndürür"""
+        if self.qr_code and self.qr_code.name:
+            return reverse('qr_app:secure_media', args=[self.qr_code.name])
+        return None
     
     @classmethod
     def user_weekly_qr_count(cls, user):

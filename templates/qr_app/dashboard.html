@@ -136,7 +136,7 @@
                         <h5 class="mb-0">{{ qr.title }}</h5>
                     </div>
                     <div class="qr-image">
-                        <img src="{{ qr.qr_code.url }}" alt="{{ qr.title }}" class="img-fluid" style="max-width: 200px;">
+                        <img src="{{ qr.get_secure_qr_url }}" alt="{{ qr.title }}" class="img-fluid" style="max-width: 200px;">
                     </div>
                     <div class="card-body">
                         <p class="card-text">

@@ -7,6 +7,9 @@ urlpatterns = [
     path('redirect/<str:slug>/', views.redirect_qr, name='redirect_qr'),
     path('api/create-qr/', views.create_qr_api, name='create_qr_api'),
     
+    # Güvenli media dosya servisi
+    path('secure-media/<path:file_path>', views.secure_media_view, name='secure_media'),
+    
     # Kullanıcı kimlik doğrulama
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
