@@ -18,11 +18,15 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Proje dosyalarını kopyala
 COPY . .
 
+# entrypoint.sh script'ini kopyala ve çalıştırılabilir yap
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 # Statik dosyaları topla
 RUN python manage.py collectstatic --noinput
 
-# Veritabanı migration'larını uygula
-RUN python manage.py migrate --noinput
+# Veritabanı migration'larını uygula (entrypoint.sh içine taşındı)
+# RUN python manage.py migrate --noinput
 
 # Gunicorn'u kur (veya başka bir WSGI sunucusu)
 RUN pip install gunicorn
@@ -30,5 +34,6 @@ RUN pip install gunicorn
 # Portu dışa aktar
 EXPOSE 8000
 
-# Uygulamayı Gunicorn ile çalıştır
+# Uygulamayı entrypoint script'i ile çalıştır
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn", "--bind", ":8000", "--workers", "3", "qr_redirect.wsgi:application"] 
