@@ -21,6 +21,9 @@ COPY . .
 # Statik dosyaları topla
 RUN python manage.py collectstatic --noinput
 
+# Veritabanı migration'larını uygula
+RUN python manage.py migrate --noinput
+
 # Gunicorn'u kur (veya başka bir WSGI sunucusu)
 RUN pip install gunicorn
 
