@@ -1,0 +1,263 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+    body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        font-family: 'Inter', sans-serif;
+    }
+    
+    #header, #footer, .breadcrumbs {
+        display: none !important;
+    }
+    
+    #content {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        max-width: 400px;
+        width: 90%;
+        text-align: center;
+        margin: 0;
+    }
+    
+    .login-header {
+        margin-bottom: 30px;
+    }
+    
+    .login-header h1 {
+        color: #374151;
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+    }
+    
+    .login-header p {
+        color: #6b7280;
+        margin: 0;
+        font-size: 1rem;
+    }
+    
+    .form-row {
+        margin-bottom: 20px !important;
+        text-align: left;
+    }
+    
+    .form-row input {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 15px !important;
+        border: 2px solid #e5e7eb !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        transition: all 0.3s ease !important;
+        background: #ffffff !important;
+        color: #374151 !important;
+        font-weight: 500 !important;
+    }
+    
+    .form-row input::placeholder {
+        color: #9ca3af !important;
+        font-weight: 400 !important;
+    }
+    
+    .form-row input:focus {
+        border-color: #667eea !important;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1) !important;
+        background: #ffffff !important;
+        color: #111827 !important;
+        outline: none !important;
+    }
+    
+    .form-row input[type="text"], 
+    .form-row input[type="password"] {
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
+    .form-row label {
+        font-weight: 600 !important;
+        color: #374151 !important;
+        margin-bottom: 8px !important;
+        font-size: 14px !important;
+        display: block !important;
+    }
+    
+    .submit-row {
+        margin-top: 30px !important;
+        text-align: center !important;
+    }
+    
+    .submit-row input {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        border: none !important;
+        color: white !important;
+        padding: 15px 40px !important;
+        border-radius: 10px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+    
+    .submit-row input:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3) !important;
+    }
+    
+    .submit-row input:active {
+        transform: translateY(0px) !important;
+    }
+    
+    .errornote {
+        background: #fef2f2 !important;
+        color: #dc2626 !important;
+        border: 2px solid #fca5a5 !important;
+        border-radius: 10px !important;
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+        font-weight: 500 !important;
+    }
+    
+    .login-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.8;
+    }
+    
+    .footer-links {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #e5e7eb;
+    }
+    
+    .footer-links a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 500;
+        margin: 0 10px;
+        font-size: 14px;
+        transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+        color: #764ba2;
+    }
+    
+    /* Input field hover effect */
+    .form-row input:hover {
+        border-color: #c7d2fe !important;
+        background: #fafbff !important;
+    }
+    
+    /* Auto-fill styles for better visibility */
+    .form-row input:-webkit-autofill,
+    .form-row input:-webkit-autofill:hover,
+    .form-row input:-webkit-autofill:focus {
+        -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+        -webkit-text-fill-color: #374151 !important;
+        transition: background-color 5000s ease-in-out 0s !important;
+    }
+    
+    /* Error states */
+    .form-row input.error,
+    .form-row .errors + input {
+        border-color: #dc2626 !important;
+        background: #fef2f2 !important;
+    }
+    
+    .form-row .errorlist {
+        color: #dc2626 !important;
+        font-size: 12px !important;
+        margin-top: 5px !important;
+        font-weight: 500 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="login-header">
+    <div class="login-icon">🔐</div>
+    <h1>Admin Panel Girişi</h1>
+    <p>QR Generator Yönetim Sistemi</p>
+</div>
+
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+    {% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">{{ error }}</p>
+{% endfor %}
+{% endif %}
+
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+  <div class="form-row">
+    {{ form.username.errors }}
+    {{ form.username.label_tag }} {{ form.username }}
+  </div>
+  <div class="form-row">
+    {{ form.password.errors }}
+    {{ form.password.label_tag }} {{ form.password }}
+    <input type="hidden" name="next" value="{{ next }}">
+  </div>
+  {% url 'admin_password_reset' as password_reset_url %}
+  {% if password_reset_url %}
+  <div class="password-reset-link">
+    <a href="{{ password_reset_url }}">{% translate 'Forgotten your password or username?' %}</a>
+  </div>
+  {% endif %}
+  <div class="submit-row">
+    <input type="submit" value="{% translate 'Log in' %}">
+  </div>
+</form>
+
+<div class="footer-links">
+    <a href="{% url 'qr_app:login' %}">🏠 Ana Giriş</a>
+    <a href="{% url 'qr_app:register' %}">📝 Kayıt Ol</a>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('login-form');
+    const submitBtn = form.querySelector('input[type="submit"]');
+    const inputs = form.querySelectorAll('input[type="text"], input[type="password"]');
+    
+    // Form submit handling
+    form.addEventListener('submit', function() {
+        submitBtn.value = 'Giriş yapılıyor...';
+        submitBtn.style.opacity = '0.7';
+        submitBtn.disabled = true;
+    });
+    
+    // Auto focus ilk input
+    const firstInput = form.querySelector('input[type="text"], input[type="password"]');
+    if (firstInput) {
+        firstInput.focus();
+    }
+    
+    // Input focus animations
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.style.transform = 'scale(1.02)';
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.style.transform = 'scale(1)';
+        });
+    });
+});
+</script>
+{% endblock %} 

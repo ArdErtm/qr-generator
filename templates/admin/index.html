@@ -1,0 +1,104 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static admin_urls %}
+
+{% block content %}
+<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; border-radius: 12px; margin-bottom: 30px; text-align: center;">
+    <h1 style="font-size: 2.5rem; margin-bottom: 10px; font-weight: 700;">🔗 QR Generator Admin Panel</h1>
+    <p style="font-size: 1.2rem; opacity: 0.9; margin: 0;">QR Kod Yönetim ve İstatistik Merkezi</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+    <div style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 25px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">📊</div>
+        <h3 style="margin: 0 0 10px 0;">Sistem İstatistikleri</h3>
+        <p style="opacity: 0.9; margin: 0;">Genel sistem verilerini görüntüleyin</p>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #11998e, #38ef7d); color: white; padding: 25px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">🔗</div>
+        <h3 style="margin: 0 0 10px 0;">QR Kod Yönetimi</h3>
+        <p style="opacity: 0.9; margin: 0;">Tüm QR kodlarını yönetin</p>
+    </div>
+    
+    <div style="background: linear-gradient(135deg, #fa709a, #fee140); color: white; padding: 25px; border-radius: 12px; text-align: center;">
+        <div style="font-size: 3rem; margin-bottom: 10px;">👥</div>
+        <h3 style="margin: 0 0 10px 0;">Kullanıcı Yönetimi</h3>
+        <p style="opacity: 0.9; margin: 0;">Kullanıcıları görüntüleyin ve düzenleyin</p>
+    </div>
+</div>
+
+{% if app_list %}
+    {% for app in app_list %}
+        <div class="app-{{ app.app_label }} module">
+            <table>
+                <caption>
+                    <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">{{ app.name }}</a>
+                </caption>
+                {% for model in app.models %}
+                    <tr class="model-{{ model.object_name|lower }}">
+                        {% if model.admin_url %}
+                            <th scope="row"><a href="{{ model.admin_url }}" style="display: flex; align-items: center; gap: 10px;">
+                                {% if 'qrcode' in model.object_name|lower %}
+                                    <span style="font-size: 1.5rem;">🔗</span>
+                                {% elif 'user' in model.object_name|lower %}
+                                    <span style="font-size: 1.5rem;">👤</span>
+                                {% elif 'group' in model.object_name|lower %}
+                                    <span style="font-size: 1.5rem;">👥</span>
+                                {% else %}
+                                    <span style="font-size: 1.5rem;">📄</span>
+                                {% endif %}
+                                {{ model.name }}
+                            </a></th>
+                        {% else %}
+                            <th scope="row">{{ model.name }}</th>
+                        {% endif %}
+
+                        {% if model.add_url %}
+                            <td><a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a></td>
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+
+                        {% if model.admin_url %}
+                            {% if model.view_only %}
+                                <td><a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a></td>
+                            {% else %}
+                                <td><a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a></td>
+                            {% endif %}
+                        {% else %}
+                            <td>&nbsp;</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>{% translate "You don't have permission to view or edit anything." %}</p>
+{% endif %}
+
+<div style="background: #f8fafc; border: 2px solid #e5e7eb; border-radius: 12px; padding: 25px; margin-top: 30px;">
+    <h3 style="color: #374151; margin-top: 0;">🚀 Hızlı İşlemler</h3>
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <a href="{% url 'admin:qr_app_qrcode_changelist' %}" style="background: #2563eb; color: white; padding: 15px; border-radius: 8px; text-decoration: none; text-align: center; font-weight: 500; transition: all 0.3s ease;">
+            📋 QR Kodları Listele
+        </a>
+        <a href="{% url 'admin:qr_app_qrcode_add' %}" style="background: #059669; color: white; padding: 15px; border-radius: 8px; text-decoration: none; text-align: center; font-weight: 500; transition: all 0.3s ease;">
+            ➕ Yeni QR Kod
+        </a>
+        <a href="{% url 'admin:auth_user_changelist' %}" style="background: #d97706; color: white; padding: 15px; border-radius: 8px; text-decoration: none; text-align: center; font-weight: 500; transition: all 0.3s ease;">
+            👥 Kullanıcıları Görüntüle
+        </a>
+    </div>
+</div>
+
+<style>
+    .app-{{ app.app_label }} .module caption a:hover,
+    div[style*="background: #2563eb"]:hover,
+    div[style*="background: #059669"]:hover,
+    div[style*="background: #d97706"]:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+</style>
+{% endblock %} 

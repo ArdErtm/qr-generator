@@ -1,0 +1,404 @@
+/* ===============================================
+   QR Generator Admin Panel - Custom Styles
+   =============================================== */
+
+/* Root Variables */
+:root {
+    --primary-color: #2563eb;
+    --secondary-color: #1e40af;
+    --accent-color: #3b82f6;
+    --success-color: #059669;
+    --warning-color: #d97706;
+    --danger-color: #dc2626;
+    --dark-color: #1f2937;
+    --light-color: #f8fafc;
+    --border-color: #e5e7eb;
+    --text-color: #374151;
+    --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Header Styling */
+#header {
+    background: var(--bg-gradient) !important;
+    color: white !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border-bottom: none !important;
+}
+
+#branding h1 {
+    color: white !important;
+    font-weight: 700 !important;
+    font-size: 1.8rem !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#branding h1:before {
+    content: "🔗 ";
+    font-size: 1.5rem;
+    margin-right: 8px;
+}
+
+#user-tools {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    backdrop-filter: blur(10px);
+}
+
+#user-tools a {
+    color: white !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+#user-tools a:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-radius: 4px !important;
+    padding: 4px 8px !important;
+}
+
+/* Breadcrumbs */
+.breadcrumbs {
+    background: linear-gradient(to right, var(--light-color), #ffffff) !important;
+    border: none !important;
+    padding: 16px 20px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.breadcrumbs a {
+    color: var(--primary-color) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+}
+
+.breadcrumbs a:hover {
+    color: var(--secondary-color) !important;
+}
+
+/* Main Content Area */
+#content {
+    background: var(--light-color) !important;
+    min-height: calc(100vh - 120px);
+}
+
+.colM {
+    background: white !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+    margin: 20px !important;
+    padding: 30px !important;
+}
+
+/* Dashboard Modules */
+.module {
+    background: white !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    margin-bottom: 20px !important;
+    overflow: hidden !important;
+    transition: all 0.3s ease !important;
+}
+
+.module:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.module h2 {
+    background: var(--bg-gradient) !important;
+    color: white !important;
+    padding: 16px 20px !important;
+    margin: 0 !important;
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    border-bottom: none !important;
+}
+
+.module table {
+    border: none !important;
+}
+
+.module th {
+    background: var(--light-color) !important;
+    color: var(--text-color) !important;
+    font-weight: 600 !important;
+    padding: 12px 16px !important;
+    border-bottom: 2px solid var(--border-color) !important;
+}
+
+.module td {
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #f3f4f6 !important;
+}
+
+.module tr:hover {
+    background: #f8fafc !important;
+}
+
+/* Buttons */
+.button, input[type=submit], input[type=button], .submit-row input, button {
+    background: var(--primary-color) !important;
+    border: none !important;
+    color: white !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    text-transform: none !important;
+}
+
+.button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, button:hover {
+    background: var(--secondary-color) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+.button.default, .default {
+    background: var(--success-color) !important;
+}
+
+.button.default:hover, .default:hover {
+    background: #047857 !important;
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3) !important;
+}
+
+/* Delete buttons */
+.deletelink {
+    background: var(--danger-color) !important;
+}
+
+.deletelink:hover {
+    background: #b91c1c !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3) !important;
+}
+
+/* Form Styling */
+.form-row {
+    margin-bottom: 20px !important;
+    padding: 16px !important;
+    background: white !important;
+    border-radius: 8px !important;
+    border: 1px solid var(--border-color) !important;
+}
+
+.form-row:hover {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+}
+
+label {
+    font-weight: 600 !important;
+    color: var(--text-color) !important;
+    margin-bottom: 8px !important;
+    display: block !important;
+}
+
+input[type=text], input[type=password], input[type=email], input[type=url], 
+input[type=number], select, textarea {
+    border: 2px solid var(--border-color) !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+    width: 100% !important;
+    max-width: 400px !important;
+}
+
+input[type=text]:focus, input[type=password]:focus, input[type=email]:focus, 
+input[type=url]:focus, input[type=number]:focus, select:focus, textarea:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+    outline: none !important;
+}
+
+/* Search Bar */
+#searchbar {
+    background: white !important;
+    border: 2px solid var(--border-color) !important;
+    border-radius: 25px !important;
+    padding: 8px 16px !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease !important;
+}
+
+#searchbar:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1) !important;
+    outline: none !important;
+}
+
+/* Action Buttons */
+.actions {
+    background: var(--light-color) !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin-bottom: 20px !important;
+}
+
+.actions select {
+    border-radius: 6px !important;
+    border: 2px solid var(--border-color) !important;
+    padding: 8px 12px !important;
+}
+
+/* Pagination */
+.paginator {
+    background: white !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+    text-align: center !important;
+}
+
+.paginator a {
+    background: var(--primary-color) !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    text-decoration: none !important;
+    margin: 0 4px !important;
+    transition: all 0.3s ease !important;
+}
+
+.paginator a:hover {
+    background: var(--secondary-color) !important;
+    transform: translateY(-1px) !important;
+}
+
+.paginator .this-page {
+    background: var(--success-color) !important;
+    color: white !important;
+    padding: 8px 12px !important;
+    border-radius: 6px !important;
+    margin: 0 4px !important;
+}
+
+/* Messages */
+.messagelist {
+    list-style: none !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+}
+
+.messagelist li {
+    border-radius: 8px !important;
+    padding: 16px 20px !important;
+    margin-bottom: 12px !important;
+    border-left: 4px solid !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+
+.messagelist .success {
+    background: #ecfdf5 !important;
+    color: #065f46 !important;
+    border-left-color: var(--success-color) !important;
+}
+
+.messagelist .warning {
+    background: #fffbeb !important;
+    color: #92400e !important;
+    border-left-color: var(--warning-color) !important;
+}
+
+.messagelist .error {
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+    border-left-color: var(--danger-color) !important;
+}
+
+/* QR Code Preview Styling */
+img[alt="QR Kod"] {
+    border-radius: 8px !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease !important;
+}
+
+img[alt="QR Kod"]:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .colM {
+        margin: 10px !important;
+        padding: 20px !important;
+    }
+    
+    #header {
+        padding: 10px !important;
+    }
+    
+    .module h2 {
+        font-size: 1.1rem !important;
+        padding: 12px 16px !important;
+    }
+    
+    input[type=text], input[type=password], input[type=email], 
+    input[type=url], input[type=number], select, textarea {
+        max-width: 100% !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --text-color: #f3f4f6;
+        --light-color: #1f2937;
+        --border-color: #374151;
+    }
+    
+    body {
+        background: #111827 !important;
+        color: #f3f4f6 !important;
+    }
+    
+    .colM {
+        background: #1f2937 !important;
+    }
+    
+    .module {
+        background: #1f2937 !important;
+        border-color: #374151 !important;
+    }
+    
+    .form-row {
+        background: #1f2937 !important;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Custom Icons */
+.changelink:before, .addlink:before {
+    font-size: 16px !important;
+    margin-right: 8px !important;
+}
+
+.changelink:before {
+    content: "✏️ ";
+}
+
+.addlink:before {
+    content: "➕ ";
+}
+
+.deletelink:before {
+    content: "🗑️ ";
+    margin-right: 8px !important;
+} 
